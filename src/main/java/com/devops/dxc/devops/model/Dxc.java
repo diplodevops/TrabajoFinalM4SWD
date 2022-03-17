@@ -57,4 +57,5 @@ public class Dxc implements Serializable{
 	public void setAhorro(int ahorro) {
 		this.ahorro = ahorro;
 	}
+
 }
