@@ -24,4 +24,6 @@ public class RestData {
         Dxc response = new Dxc(Integer.parseInt(ahorro), Integer.parseInt(sueldo));
 		return response;
 	}
+
+	
 }
