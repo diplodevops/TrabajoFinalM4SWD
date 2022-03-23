@@ -32,7 +32,7 @@ class DevopsApplicationTests {
 	@Test
 	void getImpusto(){
 		assertEquals(0, Util.getImpuesto(100000, 100000));
-		assertEquals(320000, Util.getImpuesto(100000, 1500001));
+		assertEquals(0, Util.getImpuesto(100000, 1500001));
 	}
 
 	@Test 
