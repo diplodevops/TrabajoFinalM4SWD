@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %} {% endblock %}</title>
+    <!--===============================================================================================-->	
+	<link rel="icon" href="{% static 'images/icons/plant.png' %}"/>
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/animate/animate.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'vendor/select2/select2.min.css' %}">
+    <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <div class="topnav">
+        <a class="active" href="{% url 'dxc:index' %}">Home</a>
+        <a href="{% url 'dxc:retiro' %}">Retiro 10%</a>
+        <a href="#contact">Impuesto</a>
+        <a href="#about">Saldo Restante</a>
+      </div>
+
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+
+
+<!--===============================================================================================-->	
+<script src="{% static '/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--============={% static '============================================================================-->
+	<script src="{% static '/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static '/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--============={% static '============================================================================-->
+	<script src="{% static '/select2/select2.min.js' %}"></script>
+<!--============={% static '============================================================================-->
+	<script src="{% static '/countdowntime/moment.min.js' %}"></script>
+	<script src="{% static '/countdowntime/moment-timezone.min.js' %}"></script>
+	<script src="{% static '/countdowntime/moment-timezone-with-data.min.js' %}"></script>
+	<script src="{% static '/countdowntime/countdowntime.js' %}"></script>
+	<script>
+		$('.cd100').countdown100({
+			/*Set Endtime here*/
+			/*Endtime must be > current time*/
+			endtimeYear: 0,
+			endtimeMonth: 0,
+			endtimeDate: 35,
+			endtimeHours: 18,
+			endtimeMinutes: 0,
+			endtimeSeconds: 0,
+			timeZone: "" 
+			// ex:  timeZone: "America/New_York"
+			//go to " http://momentjs.com/timezone/ " to get timezone
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="{% static 'vendor/tilt/tilt.jquery.min.js' %}"></script>
+	<script >
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+	</script>
+<!--===============================================================================================-->
+
+	<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

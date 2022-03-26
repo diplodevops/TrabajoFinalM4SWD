@@ -1,0 +1,23 @@
+{% extends "dxc/base.html" %}
+{% block title %} Retiro {% endblock %}
+{% block content %}
+    <h1> Ingrese datos para retiro</h1>
+    <br>
+    <div class="retiro">
+        <form method="post">
+            {{ dxc_form.as_p }}
+            {% csrf_token %}
+            <br>
+            <p><input type="submit" value ="Calcular"> </p>
+        </form>
+    </div>
+
+    <br>
+    <br>
+    {% if answered %}
+    <h1> Sus resultados son: </h1>
+        {{ dxc }}
+    {% endif %}
+{% endblock %}
+
+
