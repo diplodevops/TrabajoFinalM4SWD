@@ -5,10 +5,15 @@ import java.util.logging.Logger;
 import com.devops.dxc.devops.model.Dxc;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
+import com.devops.dxc.devops.model.Util;
+import com.devops.dxc.devops.model.InputModel;
+
 
 @RestController
 @RequestMapping(path = "/rest/msdxc")
@@ -25,5 +30,22 @@ public class RestData {
 		return response;
 	}
 
-	
+	@GetMapping(path="/get_uf", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody int test(){
+		int uf = Util.getUf();
+		return uf;
+	}
+
+	@PostMapping(path="/10", produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody Dxc getTen(@RequestBody Dxc inputDxc){
+		int sueldo = inputDxc.getSueldo();
+		int ahorro = inputDxc.getAhorro();
+
+		System.out.println(sueldo);
+		System.out.println(ahorro);
+
+		Dxc response = new Dxc(sueldo, ahorro);
+		return response;
+	}
+
 }
