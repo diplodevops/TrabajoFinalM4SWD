@@ -12,13 +12,15 @@ def index(request):
 def retiro(request):
     answered = False
     dxc = None
-    
+    tipo = None
+
     if request.method == 'POST':
         dxc_form = DxcForm(data=request.POST)
 
         if dxc_form.is_valid():
             sueldo = int(dxc_form.cleaned_data['sueldo'])
             ahorro = int(dxc_form.cleaned_data['ahorro'])
+            tipo =  dxc_form.cleaned_data['tipo']
 
             dxc = get_dxc(sueldo, ahorro)
             answered = True
@@ -28,6 +30,7 @@ def retiro(request):
     context = {
         'dxc_form': dxc_form,
         'answered': answered,
-        'dxc': dxc
+        'dxc': dxc,
+        'tipo': tipo
     }  
     return render(request, 'dxc/retiro.html', context)

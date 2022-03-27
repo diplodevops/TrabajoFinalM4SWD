@@ -2,21 +2,26 @@
 {% block title %} Retiro {% endblock %}
 {% block content %}
     <h1> Ingrese datos para retiro</h1>
-    <br>
-    <div class="retiro">
-        <form method="post">
-            {{ dxc_form.as_p }}
-            {% csrf_token %}
-            <br>
-            <p><input type="submit" value ="Calcular"> </p>
-        </form>
-    </div>
 
+    <div clas="row">
+        <div clas ="column">
+            <br>
+            <div class="retiro">
+                <form method="post">
+                    {{ dxc_form.as_p }}
+                    {% csrf_token %}
+                    <br>
+                    <p><input type="submit" value ="Calcular"> </p>
+                </form>
+            </div>
+        </div>
+    </div>
     <br>
     <br>
     {% if answered %}
     <h1> Sus resultados son: </h1>
         {{ dxc }}
+        {{ tipo }}
     {% endif %}
 {% endblock %}
 
