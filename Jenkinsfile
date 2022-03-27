@@ -36,7 +36,7 @@
             steps {
                 script {
                     sh "echo 'run spring-boot app'"
-                    sh "cd TrabajoFinalM4SWD-front"
+                    //sh "cd TrabajoFinalM4SWD-front"
                     sh "yarn install"
                     sh "nohup yarn serve --port 3000 &"
                 }
