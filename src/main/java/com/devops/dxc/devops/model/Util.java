@@ -37,12 +37,43 @@ public class Util {
     public static int getImpuesto(int ahorro, int sueldo){
         int uf = getUf();
         int impuesto = 0; 
+        float impuestoF = 0;
+        int retiro = getDxc(ahorro, sueldo);
 
         if(sueldo > 1500000){
-            
+            int bruto_mensual_retiro = (sueldo * 12 + getDxc(ahorro, sueldo))/ 12;  // se calcula el sueldo bruto mas el 10% a retirar
+            /*  Tramos
+            1.- 1.500.001 -> 1.530.870  | 0,04  |  27.555,66
+            2.- 1.530.871 -> 2.551.450  | 0,08  |  88.790,46
+            3.- 2.551.451 -> 3.572.030  | 0,135 | 229.120,21
+            4.- 3.572.031 -> 4.592.610  | 0,23  | 568.463,06
+            5.- 4.592.611 -> 6.123.480  | 0,304 | 908.316,20
+            6.- 6.123.481 -> 15.818.990 | 0,35  | 1.189.996,28
+            7.- 15.818.991 >            | 0,4   | 1.980.945,78   
+            */ 
+            if(sueldo > 1500000 && sueldo <= 1530870){
+                impuestoF = retiro * 0.04f;
+            }else if(sueldo > 1500000 && sueldo <= 2551450){
+                impuestoF = retiro * 0.08f;
+            }else if(sueldo > 2551450 && sueldo <= 3572030){
+                impuestoF = retiro * 0.135f;
+            }else if(sueldo > 3572030 && sueldo <= 4592610){
+                impuestoF = retiro * 0.23f;
+            }else if(sueldo > 4592610 && sueldo <= 6123480){
+                impuestoF = retiro * 0.304f;
+            }else if(sueldo > 6123480 && sueldo <= 15818990){
+                impuestoF = retiro * 0.35f;
+            }else if(sueldo > 15818990){
+                impuestoF = retiro * 0.40f;
+            }
+            impuesto = (int)impuestoF;
+
+
         }else{
             impuesto = 0;
         }
+
+    
 
         return impuesto;
     }
