@@ -4,7 +4,7 @@
         stage("Paso 1: Testing unit tests"){
             steps {
                 script {
-                    sh "mvn test"
+                    sh "mvn package"
                 }
             }
         }
@@ -12,7 +12,8 @@
             steps {
                 script {
                     sh "echo 'run spring-boot app'"
-                    sh "JENKINS_NODE_COOKIE=dontKillMe nohup ./mvnw spring-boot:run &"
+                    //sh "JENKINS_NODE_COOKIE=dontKillMe nohup ./mvnw spring-boot:run &"
+                    sh "nohup java -jar target/devops-0.0.1-SNAPSHOT.jar & >/dev/null"
                 }
             }
         }
