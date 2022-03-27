@@ -1,0 +1,16 @@
+version: '3'
+services:
+    front:
+      build: front/.
+      command: python manage.py runserver 0.0.0.0:8000
+      ports:
+      - "8000:8000"
+      links:
+        - back
+
+    back:
+      image: spring-boot
+      build: back/.
+      command: mvn spring-boot:run
+      ports:
+      - "8080:8080"
