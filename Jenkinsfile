@@ -12,7 +12,7 @@
             steps {
                 script {
                     sh "echo 'run spring-boot app'"
-                    sh "nohup ./mvnw spring-boot:run &"
+                    sh "JENKINS_NODE_COOKIE=dontKillMe nohup ./mvnw spring-boot:run &"
                 }
             }
         }
