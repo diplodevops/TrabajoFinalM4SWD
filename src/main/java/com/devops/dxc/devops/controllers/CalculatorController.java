@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ public class CalculatorController {
 	private static final int MIN_AHORRO = 100000;
 	private static final int MAX_AHORRO = 500000000;
 
+	@CrossOrigin
 	@GetMapping(path = "/dxc", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getData(@RequestParam Integer sueldo, @RequestParam Integer ahorro) {
 		ResponseEntity<?> salaryValidation = validateSalary(sueldo);
