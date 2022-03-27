@@ -46,6 +46,7 @@
             steps {
                 script {
                     sh "echo 'Download and checkout Selenium project'"
+                    sh "sleep 60"
                 }
             }
         }
