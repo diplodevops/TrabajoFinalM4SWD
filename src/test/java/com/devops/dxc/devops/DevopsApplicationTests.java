@@ -21,12 +21,19 @@ import com.devops.dxc.devops.model.Util;
 import retrofit2.Call;
 import retrofit2.mock.Calls;
 
-// docker run --rm -ti -v $(pwd):/code -w /code -e TZ=America/Santiago -p 8080:8080 maven bash
+// docker run --rm -ti -v $(pwd):/code -w /code -e TZ=America/Santiago -p 8081:8081 maven bash
 
 @SpringBootTest
 class DevopsApplicationTests {
 
 	private static final double UF_MOCK_VALUE = 31000.00;
+	private static final double FACTOR_TRAMO_1 = 0.04;
+	private static final double FACTOR_TRAMO_2 = 0.08;
+	private static final double FACTOR_TRAMO_3 = 0.135;
+	private static final double FACTOR_TRAMO_4 = 0.23;
+	private static final double FACTOR_TRAMO_5 = 0.304;
+	private static final double FACTOR_TRAMO_6 = 0.35;
+	private static final double FACTOR_TRAMO_7 = 0.4;
 	static MockedStatic<MiIndicadorClient> miMockedStatic;
 
 	@BeforeAll
@@ -122,7 +129,7 @@ class DevopsApplicationTests {
 		int sueldo = 1500000;
 		int ahorro = (int) (Util.getUf() * 1500);
 		Dxc dxc = new Dxc(ahorro, sueldo, Util.getUf());
-		int expectedResult = (int) (dxc.getDxc() * 2.20 / 100);
+		int expectedResult = (int) Math.round(dxc.getDxc() * FACTOR_TRAMO_1);
 		assertEquals(expectedResult, dxc.getImpuesto());
 	}
 
@@ -131,7 +138,7 @@ class DevopsApplicationTests {
 		int sueldo = 1800000;
 		int ahorro = (int) (Util.getUf() * 1500);
 		Dxc dxc = new Dxc(ahorro, sueldo, Util.getUf());
-		int expectedResult = (int) (dxc.getDxc() * 4.52 / 100);
+		int expectedResult = (int) Math.round(dxc.getDxc() * FACTOR_TRAMO_2);
 		assertEquals(expectedResult, dxc.getImpuesto());
 	}
 
@@ -140,7 +147,7 @@ class DevopsApplicationTests {
 		int sueldo = 3000000;
 		int ahorro = (int) (Util.getUf() * 1500);
 		Dxc dxc = new Dxc(ahorro, sueldo, Util.getUf());
-		int expectedResult = (int) (dxc.getDxc() * 7.09 / 100);
+		int expectedResult = (int) Math.round(dxc.getDxc() * FACTOR_TRAMO_3);
 		assertEquals(expectedResult, dxc.getImpuesto());
 	}
 
@@ -149,7 +156,7 @@ class DevopsApplicationTests {
 		int sueldo = 4500000;
 		int ahorro = (int) (Util.getUf() * 1500);
 		Dxc dxc = new Dxc(ahorro, sueldo, Util.getUf());
-		int expectedResult = (int) (dxc.getDxc() * 10.62 / 100);
+		int expectedResult = (int) Math.round(dxc.getDxc() * FACTOR_TRAMO_4);
 		assertEquals(expectedResult, dxc.getImpuesto());
 	}
 
@@ -158,7 +165,7 @@ class DevopsApplicationTests {
 		int sueldo = 6000000;
 		int ahorro = (int) (Util.getUf() * 1500);
 		Dxc dxc = new Dxc(ahorro, sueldo, Util.getUf());
-		int expectedResult = (int) (dxc.getDxc() * 15.57 / 100);
+		int expectedResult = (int) Math.round(dxc.getDxc() * FACTOR_TRAMO_5);
 		assertEquals(expectedResult, dxc.getImpuesto());
 	}
 
@@ -167,13 +174,28 @@ class DevopsApplicationTests {
 		int sueldo = 10000000;
 		int ahorro = (int) (Util.getUf() * 1500);
 		Dxc dxc = new Dxc(ahorro, sueldo, Util.getUf());
-		int expectedResult = (int) (dxc.getDxc() * 27.48 / 100);
+		int expectedResult = (int) Math.round(dxc.getDxc() * FACTOR_TRAMO_6);
+		assertEquals(expectedResult, dxc.getImpuesto());
+	}
+
+	@Test
+	public void taxes_with_salary_tramo_7() {
+		int sueldo = 18000000;
+		int ahorro = (int) (Util.getUf() * 1500);
+		Dxc dxc = new Dxc(ahorro, sueldo, Util.getUf());
+		int expectedResult = (int) Math.round(dxc.getDxc() * FACTOR_TRAMO_7);
 		assertEquals(expectedResult, dxc.getImpuesto());
 	}
 
 	@Test
 	public void withdrawal_with_no_salary() {
-		Dxc dxc = new Dxc(10000000, 0, Util.getUf());
-		assertEquals(0, dxc.getImpuesto());
+		Dxc dxc = new Dxc(1000000, 0, Util.getUf());
+		assertEquals(1000000, dxc.getDxc());
+	}
+
+	@Test
+	public void withdrawal_with_no_savings() {
+		Dxc dxc = new Dxc(0, 1000000, Util.getUf());
+		assertEquals(0, dxc.getDxc());
 	}
 }

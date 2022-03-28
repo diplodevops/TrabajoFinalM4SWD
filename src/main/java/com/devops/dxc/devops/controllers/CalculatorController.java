@@ -21,11 +21,12 @@ import com.devops.dxc.devops.model.Util;
 public class CalculatorController {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(CalculatorController.class);
-	private static final int MIN_SALARY = 350000;
-	private static final int MAX_SALARY = 15000000;
-	private static final int MIN_AHORRO = 100000;
-	private static final int MAX_AHORRO = 500000000;
+	private static final int MIN_SALARY = 0;
+	private static final int MAX_SALARY = 2147483647;
+	private static final int MIN_AHORRO = 0;
+	private static final int MAX_AHORRO = 2147483647;
 
+	@SuppressWarnings("unused")
 	@CrossOrigin
 	@GetMapping(path = "/dxc", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getData(@RequestParam Integer sueldo, @RequestParam Integer ahorro) {
@@ -35,9 +36,18 @@ public class CalculatorController {
 		ResponseEntity<?> ahorroValidation = validateAhorro(ahorro);
 		if (ahorroValidation != null)
 			return ahorroValidation;
+		Double ufValue = Util.getUf();
+		if (ufValue == null)
+			return ufServiceError();
 		LOGGER.info("Calculating withdrawal : sueldo[{}] ahorro[{}]", sueldo, ahorro);
-		Dxc response = new Dxc(ahorro, sueldo, Util.getUf());
+		Dxc response = new Dxc(ahorro, sueldo, ufValue);
 		return ResponseEntity.ok(response);
+	}
+
+	private ResponseEntity<?> ufServiceError() {
+		Map<String, String> errorResponse = new HashMap<>();
+		errorResponse.put("message", "Error getting UF value from UF service");
+		return ResponseEntity.badRequest().body(errorResponse);
 	}
 
 	private ResponseEntity<?> validateAhorro(Integer ahorro) {

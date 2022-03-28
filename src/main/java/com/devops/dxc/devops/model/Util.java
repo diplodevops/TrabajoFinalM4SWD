@@ -1,15 +1,13 @@
 package com.devops.dxc.devops.model;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.devops.dxc.devops.mi.MiIndicadorClient;
-import com.devops.dxc.devops.mi.UnidadFomento;
+import com.devops.dxc.devops.cmf.CMFClient;
+import com.devops.dxc.devops.cmf.CMFResponse;
 
 import retrofit2.Response;
 
@@ -31,19 +29,18 @@ public class Util {
 	 */
 	public static int getDxc(int ahorro, int sueldo) {
 		double currentUFValue = getUf();
-		System.out.println("currentUFValue: " + currentUFValue);
 		double dxc = ahorro * 0.1;
-		int totalRetiro;
+		double totalRetiro;
 		if ((dxc / currentUFValue) > MAX_UF) {
-			totalRetiro = (int) (MAX_UF * currentUFValue);
+			totalRetiro = MAX_UF * currentUFValue;
 		} else if (dxc <= (currentUFValue * MIN_UF) && ahorro >= (currentUFValue * MIN_UF)) {
-			totalRetiro = (int) (currentUFValue * MIN_UF);
+			totalRetiro = currentUFValue * MIN_UF;
 		} else if (ahorro <= (currentUFValue * MIN_UF)) {
-			totalRetiro = (int) ahorro;
+			totalRetiro = ahorro;
 		} else {
-			totalRetiro = (int) (ahorro * 0.1);
+			totalRetiro = ahorro * 0.1;
 		}
-		return Math.round(totalRetiro);
+		return Math.round((float) totalRetiro);
 	}
 
 	/**
@@ -56,35 +53,34 @@ public class Util {
 	 */
 	public static double getUf() {
 		try {
-			String fecha = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-			LOGGER.info("Fecha : " + fecha);
-			Response<UnidadFomento> response = MiIndicadorClient.getClient().getUfValue(fecha)
-					.execute();
+			Response<CMFResponse> response = CMFClient.getClient().getUfValue().execute();
 			if (response.isSuccessful())
-				valorUf = response.body().getSerie().get(0).getValor();
+				valorUf = Double.parseDouble(
+						response.body().getUFs().get(0).getValor().replaceAll("\\.", "").replaceAll(",", "."));
 		} catch (Exception e) {
-			LOGGER.info("Error getting UF value from 'miindicador.cl', using cached value.\n" + e.getMessage());
+			LOGGER.error("Error getting UF value from UF service '{}'", e.getMessage());
 		}
 		return valorUf;
 	}
 
 	enum TramoImpuestoRenta {
 		TRAMO_EXENTO(0, 752004, 0),
-		TRAMO_1(752004, 1671120, 2.20),
-		TRAMO_2(1671120, 2785200, 4.52),
-		TRAMO_3(2785200, 3899280, 7.09), 
-		TRAMO_4(3899280, 5013360, 10.62), 
-		TRAMO_5(5013360, 6684480, 15.57),
-		TRAMO_6(6684480, 17268240, 27.48);
+		TRAMO_1(752004, 1671120, 0.04),
+		TRAMO_2(1671120, 2785200, 0.08),
+		TRAMO_3(2785200, 3899280, 0.135),
+		TRAMO_4(3899280, 5013360, 0.23),
+		TRAMO_5(5013360, 6684480, 0.304),
+		TRAMO_6(6684480, 17268240, 0.35),
+		TRAMO_7(17268240, 2147483647, 0.4);
 
 		int desde;
 		int hasta;
-		double impuesto;
+		double factor;
 
-		private TramoImpuestoRenta(int desde, int hasta, double impuesto) {
+		private TramoImpuestoRenta(int desde, int hasta, double factor) {
 			this.desde = desde;
 			this.hasta = hasta;
-			this.impuesto = impuesto;
+			this.factor = factor;
 		}
 
 		public static TramoImpuestoRenta findSectionBySalary(int sueldo) {
@@ -99,6 +95,6 @@ public class Util {
 		else if (sueldoImponible < 1500000)
 			return 0;
 		else
-			return (int) (dxc * TramoImpuestoRenta.findSectionBySalary(sueldoImponible).impuesto / 100);
+			return (int) Math.round(dxc * TramoImpuestoRenta.findSectionBySalary(sueldoImponible).factor);
 	}
 }
