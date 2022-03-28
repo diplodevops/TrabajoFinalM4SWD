@@ -19,9 +19,12 @@
         }
         stage("Paso 3: Run integration tests (Postman-newman)"){
             steps {
+               checkout(
+                        [$class: 'GitSCM',
+                        branches: [[name: "main" ]],
+                        userRemoteConfigs: [[url: 'https://github.com/DipDevOpsGrp5/TrabajoFinalM4SWD-postman-integration-tests.git']]])
                 script {
-                    // TODO: Add tests execution
-                    sh "echo 'Run integration tests (Postman-newman)'"
+                    sh "newman run integration_tests.postman_collection.json"
                 }
             }
         }
