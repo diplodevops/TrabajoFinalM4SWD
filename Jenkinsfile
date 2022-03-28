@@ -24,6 +24,7 @@
                         branches: [[name: "main" ]],
                         userRemoteConfigs: [[url: 'https://github.com/DipDevOpsGrp5/TrabajoFinalM4SWD-postman-integration-tests.git']]])
                 script {
+                    sh "sleep 15"
                     sh "newman run integration_tests.postman_collection.json"
                 }
             }
