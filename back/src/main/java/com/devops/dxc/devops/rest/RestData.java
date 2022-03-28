@@ -3,6 +3,7 @@ package com.devops.dxc.devops.rest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.devops.dxc.devops.model.Dxc;
+import com.devops.dxc.devops.model.Salida;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,21 @@ public class RestData {
 		LOGGER.log(Level.INFO, "< Trabajo DevOps - DXC > <Consultado Diez por ciento>");
         Dxc response = new Dxc(Integer.parseInt(ahorro), Integer.parseInt(sueldo));
 		return response;
+	}
+
+	@RequestMapping("/saldo")
+	public Salida getSaldo(@RequestParam(name = "sueldo") String sueldo, @RequestParam(name = "ahorro") String ahorro){
+		return new Salida(Integer.parseInt(ahorro), Integer.parseInt(sueldo), "saldo");
+	}
+
+	@RequestMapping("/impuesto")
+	public Salida getImpuesto(@RequestParam(name = "sueldo") String sueldo, @RequestParam(name = "ahorro") String ahorro){
+		return new Salida(Integer.parseInt(ahorro), Integer.parseInt(sueldo), "impuesto");
+	}
+
+	@RequestMapping("/10x100")
+	public Salida get10x100(@RequestParam(name = "sueldo") String sueldo, @RequestParam(name = "ahorro") String ahorro){
+		return new Salida(Integer.parseInt(ahorro), Integer.parseInt(sueldo), "10x100");
 	}
 
 	@GetMapping(path="/get_uf", produces = MediaType.APPLICATION_JSON_VALUE)
