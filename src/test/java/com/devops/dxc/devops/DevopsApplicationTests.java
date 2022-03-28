@@ -3,7 +3,8 @@ package com.devops.dxc.devops;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,10 +12,10 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.devops.dxc.devops.mi.MiIndicadorClient;
-import com.devops.dxc.devops.mi.MiIndicadorService;
-import com.devops.dxc.devops.mi.UnidadFomento;
-import com.devops.dxc.devops.mi.UnidadFomento.Serie;
+import com.devops.dxc.devops.cmf.CMFClient;
+import com.devops.dxc.devops.cmf.CMFResponse;
+import com.devops.dxc.devops.cmf.CMFResponse.Uf;
+import com.devops.dxc.devops.cmf.CMFService;
 import com.devops.dxc.devops.model.Dxc;
 import com.devops.dxc.devops.model.Util;
 
@@ -26,7 +27,7 @@ import retrofit2.mock.Calls;
 @SpringBootTest
 class DevopsApplicationTests {
 
-	private static final double UF_MOCK_VALUE = 31000.00;
+	private static final String UF_MOCK_VALUE = "31.000,00";
 	private static final double FACTOR_TRAMO_1 = 0.04;
 	private static final double FACTOR_TRAMO_2 = 0.08;
 	private static final double FACTOR_TRAMO_3 = 0.135;
@@ -34,19 +35,21 @@ class DevopsApplicationTests {
 	private static final double FACTOR_TRAMO_5 = 0.304;
 	private static final double FACTOR_TRAMO_6 = 0.35;
 	private static final double FACTOR_TRAMO_7 = 0.4;
-	static MockedStatic<MiIndicadorClient> miMockedStatic;
+	static MockedStatic<CMFClient> miMockedStatic;
 
 	@BeforeAll
 	static void mockUfService() {
-		miMockedStatic = Mockito.mockStatic(MiIndicadorClient.class);
-		UnidadFomento uf = new UnidadFomento();
-		Serie serie = new UnidadFomento.Serie();
-		serie.setValor(UF_MOCK_VALUE);
-		uf.setSerie(Arrays.asList(serie));
-		miMockedStatic.when(MiIndicadorClient::getClient).thenReturn(new MiIndicadorService() {
+		miMockedStatic = Mockito.mockStatic(CMFClient.class);
+		CMFResponse cmfResponse = new CMFResponse();
+		List<Uf> ufList = new ArrayList<CMFResponse.Uf>();
+		Uf ufValue = cmfResponse.new Uf();
+		ufValue.setValor(UF_MOCK_VALUE);
+		ufList.add(ufValue);
+		cmfResponse.setUFs(ufList);
+		miMockedStatic.when(CMFClient::getClient).thenReturn(new CMFService() {
 			@Override
-			public Call<UnidadFomento> getUfValue(String fecha) {
-				return Calls.response(uf);
+			public Call<CMFResponse> getUfValue() {
+				return Calls.response(cmfResponse);
 			}
 		});
 	}
