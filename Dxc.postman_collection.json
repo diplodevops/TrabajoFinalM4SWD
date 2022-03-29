@@ -1,0 +1,174 @@
+{
+	"info": {
+		"_postman_id": "ba3fcbe7-0dc7-401b-b5da-dfd7a5c93d8e",
+		"name": "Dxc",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Dxc",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Diez x  Ciento\", () => {",
+							"  const responseJson = pm.response.json();",
+							"  pm.expect(responseJson.ahorro).to.eql(5000000);",
+							"  pm.expect(responseJson.dxc).to.eql(35*responseJson.uf);",
+							"});",
+							"",
+							"pm.test(\"Codigo de estado 200\", () => {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response time is less than 1000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/rest/msdxc/dxc?ahorro=5000000&sueldo=1000000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"rest",
+						"msdxc",
+						"dxc"
+					],
+					"query": [
+						{
+							"key": "ahorro",
+							"value": "5000000"
+						},
+						{
+							"key": "sueldo",
+							"value": "1000000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "saldo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Saldo\", () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson.saldo).to.eql(responseJson.ahorro - 35*responseJson.uf );\r",
+							"});\r",
+							"pm.test(\"UF Request\", () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson.uf).to.be.above(0);\r",
+							"});\r",
+							"pm.test(\"Codigo de estado 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/rest/msdxc/saldo?sueldo=1000000&ahorro=5000000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"rest",
+						"msdxc",
+						"saldo"
+					],
+					"query": [
+						{
+							"key": "sueldo",
+							"value": "1000000"
+						},
+						{
+							"key": "ahorro",
+							"value": "5000000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "impuestos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Impuesto \", () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson.impuesto).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"UF Request\", () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson.uf).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Codigo de estado 200\", () => {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/rest/msdxc/impuesto?sueldo=1500000&ahorro=5000000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"rest",
+						"msdxc",
+						"impuesto"
+					],
+					"query": [
+						{
+							"key": "sueldo",
+							"value": "1500000"
+						},
+						{
+							"key": "ahorro",
+							"value": "5000000"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
